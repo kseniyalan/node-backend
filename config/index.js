@@ -1,13 +1,20 @@
-const convict = require('convict');
-
-const constants = require('./constants');
-
-const configSchema = require('./schema');
-
-const config = convict(configSchema);
-
-// Если не будет указана валидная конфигурация, соответствующая схеме,
-// то метод validate выбросит исключение и приложение не будет запущено
-config.validate();
-
-module.exports = Object.assign(constants, config.getProperties());
+module.exports = {
+  dev: true,
+  httpPort: 80,
+  https_port: 443,
+  static_directory: 'static',
+  temp_directory: 'temp',
+  max_file_size: 25,
+  preview_size: 80,
+  passwordSalt: 'root',
+  db: {
+    PG_USERNAME: 'postgres',
+    PG_PASSWORD: 'root',
+    PG_DATABASE: 'postgres',
+    PG_HOST: '127.0.0.1',
+    PG_PORT: 5432,
+    PG_DIALECT: 'postgres',
+    operatorsAliases: false,
+    logging: true,
+  },
+};

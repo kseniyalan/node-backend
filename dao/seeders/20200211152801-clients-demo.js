@@ -17,7 +17,8 @@ module.exports = {
         created_at: new Date(new Date().setMinutes(10 + i)),
         city_id: 1,
         avatar: 1,
-        consultant_update: new Date(new Date().setMinutes(10 + i))
+        consultant_update: new Date(new Date().setMinutes(10 + i)),
+        consultant_badge: false,
       });
     }
 
@@ -35,6 +36,7 @@ module.exports = {
         city_id: 1,
         avatar: 1,
         consultant_update: new Date(new Date().setMinutes(1)),
+        consultant_badge: false,
       },
       {
         first_name: 'Android2',
@@ -49,6 +51,7 @@ module.exports = {
         city_id: 2,
         avatar: 2,
         consultant_update: new Date(new Date().setMinutes(2)),
+        consultant_badge: false,
       },
       {
         first_name: 'IOS1',
@@ -63,6 +66,7 @@ module.exports = {
         city_id: 1,
         avatar: 1,
         consultant_update: new Date(new Date().setMinutes(3)),
+        consultant_badge: false,
       },
       {
         first_name: 'Ios2',
@@ -77,6 +81,7 @@ module.exports = {
         city_id: 2,
         avatar: 2,
         consultant_update: new Date(new Date().setMinutes(4)),
+        consultant_badge: false,
       },
       {
         first_name: 'Test1',
@@ -89,6 +94,7 @@ module.exports = {
         address: 'Test address',
         created_at: new Date(new Date().setMinutes(5)),
         consultant_update: new Date(new Date().setMinutes(5)),
+        consultant_badge: false,
         city_id: 1,
         avatar: 1,
       },
@@ -103,6 +109,7 @@ module.exports = {
         address: 'Test address',
         created_at: new Date(new Date().setMinutes(6)),
         consultant_update: new Date(new Date().setMinutes(6)),
+        consultant_badge: false,
         city_id: 2,
         avatar: 2,
       },
@@ -117,6 +124,7 @@ module.exports = {
         address: 'Test address',
         created_at: new Date(new Date().setMinutes(7)),
         consultant_update: new Date(new Date().setMinutes(7)),
+        consultant_badge: false,
         city_id: 1,
         avatar: 1,
       },
@@ -131,6 +139,7 @@ module.exports = {
         address: 'Test address',
         created_at: new Date(new Date().setMinutes(8)),
         consultant_update: new Date(new Date().setMinutes(8)),
+        consultant_badge: false,
         city_id: 2,
         avatar: 2,
       },

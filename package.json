@@ -9,6 +9,7 @@
     "migrate:up": "npx sequelize db:migrate",
     "migrate:down": "npx sequelize db:migrate:undo:all",
     "seed": "npx sequelize db:seed:all",
+    "seed:undo": "npx sequelize-cli db:seed:undo:all",
     "start:dev": "node -r dotenv/config --inspect index.js",
     "test": "mocha --timeout 30000"
   },

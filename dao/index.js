@@ -11,28 +11,14 @@ const sequelize = new Sequelize(
   config.PG_DATABASE,
   config.PG_USERNAME,
   config.PG_PASSWORD,
-  Object.assign(
-    {
-      host: config.PG_HOST,
-      dialect: config.PG_DIALECT,
-      port: config.PG_PORT,
-      ssl: config.SSL,
-      dialectOptions: {
-        ssl: {
-          ca: JSON.stringify(require('./config')),
-        },
-      },
-    },
-    !config.logging
-      ? {
-          logging: false,
-        }
-      : {},
-  ),
+  {
+    logging: config.logging,
+    dialect: config.PG_DIALECT,
+  },
 );
 
 sequelize
-  .sync()
+  .sync() //{force: true} каждый раз будет перезаписывать БД при каждом запуске
   .then((result) => {})
   .catch((err) => {});
 

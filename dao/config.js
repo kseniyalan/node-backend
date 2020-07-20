@@ -8,7 +8,5 @@ module.exports = {
     host: config.PG_HOST,
     port: config.PG_PORT,
     dialect: 'postgres',
-    ssl: config.SSL,
-    dialectOptions: config.dialectOptions,
   },
 };
