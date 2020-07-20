@@ -1,6 +1,6 @@
 module.exports = {
   dev: true,
-  httpPort: 80,
+  httpPort: 5555,
   https_port: 443,
   static_directory: 'static',
   temp_directory: 'temp',
