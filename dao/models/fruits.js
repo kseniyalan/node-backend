@@ -12,6 +12,22 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING(50),
         allowNull: false,
       },
+      amount: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      eaten: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+        allowNull: false,
+      },
+      created_at: {
+        name: 'created_at',
+        field: 'created_at',
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: DataTypes.NOW,
+      },
     },
     {
       timestamps: false,
