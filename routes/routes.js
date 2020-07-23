@@ -17,4 +17,7 @@ router.patch('/fruits/:id', koaBody(), FruitsController.PatchSingleFruit);
 //Отредактировать фрукт
 router.put('/fruits/:id', koaBody(), FruitsController.PutFruit);
 
+//Создать фрукт
+router.post('/fruits', koaBody(), FruitsController.CreateFruit);
+
 module.exports = router;

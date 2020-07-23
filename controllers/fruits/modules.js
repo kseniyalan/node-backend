@@ -1,3 +1,4 @@
+const { Fruit, sequelize } = require('../../dao');
 const Validators = require('../../modules/validators');
 
 exports.GetFruitsComposeQuery = async (queryData) => {
@@ -27,6 +28,26 @@ exports.GetFruitsComposeQuery = async (queryData) => {
     page,
     limit,
   };
+};
+
+exports.CreateFruit = async ({ name, amount, eaten }) => {
+  const fruitId = await sequelize.transaction(async (t) => {
+    let fruit = await Fruit.create(
+      {
+        name,
+        amount,
+        eaten,
+        for: eaten,
+      },
+      {
+        transaction: t,
+      },
+    );
+
+    return fruit.id;
+  });
+
+  return fruitId;
 };
 
 exports.ValidateFruitData = async ({ name, amount, eaten }) => {

@@ -144,5 +144,5 @@ exports.CreateFruit = async (ctx) => {
     },
   });
 
-  return (ctx.body = ApiModels.poll(ctx, response));
+  return (ctx.body = ApiModels.fruit(ctx, response));
 };
