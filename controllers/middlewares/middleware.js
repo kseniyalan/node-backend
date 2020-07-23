@@ -1,6 +1,6 @@
-const Validators = require('../../../modules/validators');
+const Validators = require('../../modules/validators');
 
-const Error = require('../../../modules/request_error');
+const Error = require('../../modules/request_error');
 
 module.exports = async (ctx, next) => {
   const token = ctx.request.header.token;
@@ -10,7 +10,7 @@ module.exports = async (ctx, next) => {
   }
 
   if (token !== 'token') {
-    return Error(ctx, 401, 'Срок действия токена истёк');
+    return Error(ctx, 401, 'Неверный токен');
   }
 
   return next();

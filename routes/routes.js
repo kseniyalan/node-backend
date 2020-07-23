@@ -9,19 +9,19 @@ const router = new Router({
 });
 
 //Получение списка фруктов или одного фрукта
-router.get('/fruits', FruitsController.GetFruitsList);
-router.get('/fruits/:id', FruitsController.GetSingleFruit);
+router.get('/fruits', AuthMiddleware, FruitsController.GetFruitsList);
+router.get('/fruits/:id', AuthMiddleware, FruitsController.GetSingleFruit);
 
 //Обновить, фрукт съеден или нет
-router.patch('/fruits/:id', koaBody(), FruitsController.PatchSingleFruit);
+router.patch('/fruits/:id', AuthMiddleware, koaBody(), FruitsController.PatchSingleFruit);
 
 //Отредактировать фрукт
-router.put('/fruits/:id', koaBody(), FruitsController.PutFruit);
+router.put('/fruits/:id', AuthMiddleware, koaBody(), FruitsController.PutFruit);
 
 //Создать фрукт
-router.post('/fruits', koaBody(), FruitsController.CreateFruit);
+router.post('/fruits', AuthMiddleware, koaBody(), FruitsController.CreateFruit);
 
 //Удалить фрукт
-router.delete('/fruits/:id', FruitsController.DeleteFruit);
+router.delete('/fruits/:id', AuthMiddleware, FruitsController.DeleteFruit);
 
 module.exports = router;
