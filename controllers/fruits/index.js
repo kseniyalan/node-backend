@@ -1,6 +1,7 @@
 const { Fruit } = require('../../dao');
 const FruitModules = require('./modules');
 const Error = require('../../modules/request_error');
+const Validators = require('../../modules/validators');
 
 const ApiModels = {
   fruitsList: require('../../api-models/fruitsList'),
@@ -64,7 +65,7 @@ exports.PatchSingleFruit = async (ctx) => {
 
   const { eaten } = ctx.request.body;
 
-  if (![true, false].includes(eaten)) {
+  if (!Validators.isBoolean(eaten)) {
     return Error(ctx, 400, 'Не указано состояние фрукта');
   }
 
@@ -93,13 +94,7 @@ exports.PutFruit = async (ctx) => {
     return Error(ctx, 400, 'Не удалось получить id фрукта');
   }
 
-  let {
-    name,
-    amount,
-    eaten,
-    error,
-    errorText,
-  } = await FruitModules.PutFruitValidateData(ctx.request.body);
+  let { name, amount, eaten, error, errorText } = await FruitModules.ValidateFruitData(ctx.request.body);
 
   if (error) {
     return Error(ctx, 400, errorText);
@@ -131,4 +126,23 @@ exports.PutFruit = async (ctx) => {
   });
 
   return (ctx.body = ApiModels.fruit(ctx, response));
+};
+
+//Создание фрукта
+exports.CreateFruit = async (ctx) => {
+  const { name, amount, eaten, error, errorText } = await FruitModules.ValidateFruitData(ctx.request.body);
+
+  if (error) {
+    return Error(ctx, 400, errorText);
+  }
+
+  let fruitId = await FruitModules.CreateFruit({ name, amount, eaten });
+
+  let response = await Fruit.findOne({
+    where: {
+      id: fruitId,
+    },
+  });
+
+  return (ctx.body = ApiModels.poll(ctx, response));
 };

@@ -29,7 +29,7 @@ exports.GetFruitsComposeQuery = async (queryData) => {
   };
 };
 
-exports.PutFruitValidateData = async ({ name, amount, eaten }) => {
+exports.ValidateFruitData = async ({ name, amount, eaten }) => {
   let invalid_params = [];
 
   if (!Validators.nonEmptyString(name) || name.length > 50)
@@ -38,13 +38,13 @@ exports.PutFruitValidateData = async ({ name, amount, eaten }) => {
   if (!Validators.positiveIntNumber(amount))
     invalid_params.push('amount');
 
-  if (![true, false].includes(eaten))
+  if (!Validators.isBoolean(eaten))
     invalid_params.push('eaten');
 
     if (invalid_params.length > 0) {
     return {
       error: true,
-      errorText: `Не удалось получить параметры: ${invalid_params.join(', ')}`,
+      errorText: `Неверный параметр: ${invalid_params.join(', ')}`,
     };
   }
 
