@@ -146,3 +146,24 @@ exports.CreateFruit = async (ctx) => {
 
   return (ctx.body = ApiModels.fruit(ctx, response));
 };
+
+//Удаление фрукта
+exports.DeleteFruit = async (ctx) => {
+  const fruitId = Number.parseInt(ctx.params.id) || null;
+
+  if (!fruitId) {
+    return Error(ctx, 400, 'Не удалось получить id фрукта');
+  }
+
+  let fruitResponse = await Fruit.destroy({
+    where: {
+      id: fruitId,
+    },
+  });
+
+  if (!fruitResponse) {
+    return Error(ctx, 404, 'Фрукт не найден');
+  }
+
+  return (ctx.body = fruitResponse);
+};

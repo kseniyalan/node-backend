@@ -20,4 +20,7 @@ router.put('/fruits/:id', koaBody(), FruitsController.PutFruit);
 //Создать фрукт
 router.post('/fruits', koaBody(), FruitsController.CreateFruit);
 
+//Удалить фрукт
+router.delete('/fruits/:id', FruitsController.DeleteFruit);
+
 module.exports = router;
