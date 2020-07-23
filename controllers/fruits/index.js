@@ -53,3 +53,34 @@ exports.GetSingleFruit = async (ctx) => {
 
   return (ctx.body = ApiModels.fruit(ctx, fruitResponse));
 };
+
+//Обновить отдельные свойства одного фрукта
+exports.PatchSingleFruit = async (ctx) => {
+  const fruitId = Number.parseInt(ctx.params.id) || null;
+
+  if (!fruitId) {
+    return Error(ctx, 400, 'Не удалось получить id фрукта');
+  }
+
+  const { eaten } = ctx.request.body;
+
+  if (![true, false].includes(eaten)) {
+    return Error(ctx, 400, 'Не указано состояние фрукта');
+  }
+
+  let fruitResponse = await Poll.findOne({
+    where: {
+      id: fruitId,
+    },
+  });
+
+  if (!fruitResponse) {
+    return Error(ctx, 404, 'Фрукт не найден');
+  }
+
+  fruitResponse.eaten = eaten;
+
+  await fruitResponse.save();
+
+  return (ctx.body = ApiModels.fruit(ctx, fruitResponse));
+};
