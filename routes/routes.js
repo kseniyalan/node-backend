@@ -1,7 +1,8 @@
 const Router = require('koa-router');
 const koaBody = require('koa-body');
 
-const FruitsController = require(`../controllers/fruits`);
+const FruitsController = require('../controllers/fruits');
+const AuthMiddleware = require('../controllers/middlewares/middleware');
 
 const router = new Router({
   prefix: `/api`,
