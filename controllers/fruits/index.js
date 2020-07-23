@@ -68,7 +68,7 @@ exports.PatchSingleFruit = async (ctx) => {
     return Error(ctx, 400, 'Не указано состояние фрукта');
   }
 
-  let fruitResponse = await Poll.findOne({
+  let fruitResponse = await Fruit.findOne({
     where: {
       id: fruitId,
     },
@@ -83,4 +83,52 @@ exports.PatchSingleFruit = async (ctx) => {
   await fruitResponse.save();
 
   return (ctx.body = ApiModels.fruit(ctx, fruitResponse));
+};
+
+//Отредактировать фрукт
+exports.PutFruit = async (ctx) => {
+  const fruitId = Number.parseInt(ctx.params.id) || null;
+
+  if (!fruitId) {
+    return Error(ctx, 400, 'Не удалось получить id фрукта');
+  }
+
+  let {
+    name,
+    amount,
+    eaten,
+    error,
+    errorText,
+  } = await FruitModules.PutFruitValidateData(ctx.request.body);
+
+  if (error) {
+    return Error(ctx, 400, errorText);
+  }
+
+  let [fruit] = await Fruit.update(
+    {
+      name,
+      amount,
+      eaten,
+      for: eaten,
+    },
+    {
+      where: {
+        id: fruitId,
+      },
+      returning: false,
+    },
+  );
+
+  if (!fruit) {
+    return Error(ctx, 404, 'Фрукт не найден');
+  }
+
+  let response = await Fruit.findOne({
+    where: {
+      id: fruitId,
+    },
+  });
+
+  return (ctx.body = ApiModels.fruit(ctx, response));
 };

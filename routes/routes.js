@@ -14,4 +14,7 @@ router.get('/fruits/:id', FruitsController.GetSingleFruit);
 //Обновить, фрукт съеден или нет
 router.patch('/fruits/:id', koaBody(), FruitsController.PatchSingleFruit);
 
+//Отредактировать фрукт
+router.put('/fruits/:id', koaBody(), FruitsController.PutFruit);
+
 module.exports = router;
