@@ -1,6 +1,7 @@
 const Router = require('koa-router');
 const koaBody = require('koa-body');
 const path = require('path');
+const fs = require('fs');
 
 const FruitsController = require('../controllers/fruits');
 const UploadController = require('../controllers/upload');
@@ -29,6 +30,18 @@ router.post('/fruits', AuthMiddleware, koaBody(), FruitsController.CreateFruit);
 router.delete('/fruits/:id', AuthMiddleware, FruitsController.DeleteFruit);
 
 //Загрузка картинок
+//Создает папку в случае ее отсутствия
+if (
+  !fs.existsSync(
+    path.join(__dirname, '..', config.staticDirectory, config.tempDirectory),
+  )
+) {
+  fs.mkdirSync(
+    path.join(__dirname, '..', config.staticDirectory, config.tempDirectory),
+  );
+}
+
+//Сохранит файлы в папку /static/temp
 router.post(
   '/files/upload',
   AuthMiddleware,
@@ -40,7 +53,7 @@ router.post(
         __dirname,
         '..',
         config.static_directory,
-        config.temp_directory,
+        config.tempDirectory,
       ),
       keepExtensions: true,
       multiples: false,
