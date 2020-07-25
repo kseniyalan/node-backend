@@ -36,5 +36,15 @@ module.exports = (sequelize, DataTypes) => {
     },
   );
 
+  Fruit.associate = function (models) {
+    Fruit.belongsTo(models.Image, {
+      foreignKey: {
+        name: 'avatar',
+        allowNull: true,
+      },
+      onDelete: 'SET NULL',
+    });
+  };
+
   return Fruit;
 };
