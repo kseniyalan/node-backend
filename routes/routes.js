@@ -31,13 +31,14 @@ router.delete('/fruits/:id', AuthMiddleware, FruitsController.DeleteFruit);
 
 //Загрузка картинок
 //Создает папку в случае ее отсутствия
+
 if (
   !fs.existsSync(
-    path.join(__dirname, '..', config.staticDirectory, config.tempDirectory),
+    path.join(__dirname, '..', config.static_directory, config.temp_directory),
   )
 ) {
   fs.mkdirSync(
-    path.join(__dirname, '..', config.staticDirectory, config.tempDirectory),
+    path.join(__dirname, '..', config.static_directory, config.temp_directory),
   );
 }
 
@@ -53,7 +54,7 @@ router.post(
         __dirname,
         '..',
         config.static_directory,
-        config.tempDirectory,
+        config.temp_directory,
       ),
       keepExtensions: true,
       multiples: false,
