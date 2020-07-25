@@ -1,4 +1,4 @@
-const { Fruit } = require('../../dao');
+const { Fruit, Image } = require('../../dao');
 const FruitModules = require('./modules');
 const Error = require('../../modules/request_error');
 const Validators = require('../../modules/validators');
@@ -22,6 +22,7 @@ exports.GetFruitsList = async (ctx) => {
     order: fruitsOrderQuery,
     limit: limit,
     offset: limit * (page - 1),
+    include: [Image],
   });
 
   const totalFruitsCount = await Fruit.count({
@@ -46,6 +47,7 @@ exports.GetSingleFruit = async (ctx) => {
     where: {
       id: fruitId,
     },
+    include: [Image],
   });
 
   if (!fruitResponse) {
@@ -73,6 +75,7 @@ exports.PatchSingleFruit = async (ctx) => {
     where: {
       id: fruitId,
     },
+    include: [Image],
   });
 
   if (!fruitResponse) {
@@ -123,6 +126,7 @@ exports.PutFruit = async (ctx) => {
     where: {
       id: fruitId,
     },
+    include: [Image],
   });
 
   return (ctx.body = ApiModels.fruit(ctx, response));

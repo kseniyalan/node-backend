@@ -1,3 +1,5 @@
+const image = require('./image');
+
 const transform = (ctx, document) => {
   if (!document) return null;
 
@@ -7,6 +9,7 @@ const transform = (ctx, document) => {
     amount: document.amount,
     eaten: document.eaten,
     created_at: new Date(document.created_at),
+    avatar: image(ctx, document.Image),
   };
 };
 
