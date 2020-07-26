@@ -17,7 +17,7 @@ module.exports = {
         amount: 1,
         eaten: false,
         created_at: new Date(new Date().setMinutes(0)),
-        avatar: 1,
+        avatar: 2,
       },
       {
         id: 333,
@@ -25,7 +25,7 @@ module.exports = {
         amount: 2,
         eaten: false,
         created_at: new Date(new Date().setMinutes(0)),
-        avatar: 1,
+        avatar: 3,
       },
       {
         id: 444,
@@ -33,7 +33,7 @@ module.exports = {
         amount: 1,
         eaten: false,
         created_at: new Date(new Date().setMinutes(0)),
-        avatar: 1,
+        avatar: 4,
       },
       {
         id: 555,
@@ -41,7 +41,7 @@ module.exports = {
         amount: 5,
         eaten: true,
         created_at: new Date(new Date().setMinutes(0)),
-        avatar: 1,
+        avatar: 5,
       },
     ]);
   },
