@@ -159,13 +159,41 @@ exports.DeleteFruit = async (ctx) => {
     return Error(ctx, 400, 'Не удалось получить id фрукта');
   }
 
-  let fruitResponse = await Fruit.destroy({
+  //Найдем ID картинки фрукта
+  let fruitResponse = await Fruit.findOne({
+    where: {
+      id: fruitId,
+    },
+    include: [Image],
+  });
+
+  if (!fruitResponse) {
+    return Error(ctx, 404, 'Фрукт не найден');
+  }
+
+  const fruitImageId = fruitResponse.Image && fruitResponse.Image.id;
+
+  //Удалим картинку, если она есть
+  if (fruitImageId !== null) {
+    let fruitImageResponse = await Image.destroy({
+      where: {
+        id: fruitImageId,
+      },
+    });
+
+    if (!fruitImageResponse) {
+      return Error(ctx, 404, 'Не удалось удалить аватар');
+    }
+  }
+  
+  //Удалим сам фрукт
+  let fruitDeleteResponse = await Fruit.destroy({
     where: {
       id: fruitId,
     },
   });
 
-  if (!fruitResponse) {
+  if (!fruitDeleteResponse) {
     return Error(ctx, 404, 'Фрукт не найден');
   }
 

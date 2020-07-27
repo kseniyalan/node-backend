@@ -41,7 +41,7 @@ module.exports = {
         amount: 5,
         eaten: true,
         created_at: new Date(new Date().setMinutes(0)),
-        avatar: 5,
+        avatar: null,
       },
     ]);
   },
