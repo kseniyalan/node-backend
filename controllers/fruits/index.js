@@ -199,3 +199,53 @@ exports.DeleteFruit = async (ctx) => {
 
   return (ctx.body = fruitResponse);
 };
+
+//Удаление аватара фрукта
+exports.DeleteFruitAvatar = async (ctx) => {
+  const fruitId = Number.parseInt(ctx.params.id) || null;
+
+  if (!fruitId) {
+    return Error(ctx, 400, 'Не удалось получить id фрукта');
+  }
+
+  //Найдем ID картинки фрукта
+  let fruitResponse = await Fruit.findOne({
+    where: {
+      id: fruitId,
+    },
+    include: [Image],
+  });
+
+  if (!fruitResponse) {
+    return Error(ctx, 404, 'Фрукт не найден');
+  }
+
+  const fruitImageId = fruitResponse.Image && fruitResponse.Image.id;
+
+  //Удалим картинку, если она есть
+  if (fruitImageId !== null) {
+    let fruitImageResponse = await Image.destroy({
+      where: {
+        id: fruitImageId,
+      },
+    });
+
+    if (!fruitImageResponse) {
+      return Error(ctx, 404, 'Не удалось удалить аватар');
+    }
+  }
+
+  //Вернем обновленный фрукт
+  let newFruitResponse = await Fruit.findOne({
+    where: {
+      id: fruitId,
+    },
+    include: [Image],
+  });
+
+  if (!fruitResponse) {
+    return Error(ctx, 404, 'Фрукт не найден');
+  }
+
+  return (ctx.body = ApiModels.fruit(ctx, newFruitResponse));
+};
