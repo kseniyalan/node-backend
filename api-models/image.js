@@ -6,7 +6,7 @@ const transform = (ctx, document) => {
 
   return {
     id: document.id,
-    url: document.src,
+    url: path.join(config.host, document.src),
     width: document.width,
     height: document.height,
     preview: document.preview,
