@@ -30,7 +30,7 @@ router.post('/fruits', AuthMiddleware, koaBody(), FruitsController.CreateFruit);
 router.delete('/fruits/:id', AuthMiddleware, FruitsController.DeleteFruit);
 
 //Удалить аватар фрукта
-router.delete('/fruits/:id/image', AuthMiddleware, FruitsController.DeleteFruitAvatar);
+router.patch('/fruits/:id/image', AuthMiddleware, koaBody(), FruitsController.PatchFruitAvatar);
 
 //Загрузка картинок
 //Создает папку в случае ее отсутствия

@@ -1,5 +1,7 @@
 const fs = require('fs');
 const util = require('util');
+const config = require('../../config');
+const path = require('path');
 const UploadModule = require('./modules');
 
 const ApiModels = {
@@ -44,11 +46,11 @@ exports.Upload = async (ctx) => {
           ? meta.height
           : meta.width,
       preview: `data:image/jpeg;base64,${previewBuffer.toString('base64')}`,
-      src: files.image.path,
+      src: path.join(config.static_directory, config.temp_directory, files.image.name),
     };
 
-    console.log('Path: ', files.image.path);
-    console.log('Image: ', files.image);
+    //console.log('Path: ', files.image.path);
+    console.log('Creating SRC: ', image.src);
   } catch (err) {
       console.log(err);
       await fsUnlink(files.image.path);

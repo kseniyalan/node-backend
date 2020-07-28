@@ -8,7 +8,7 @@ const ApiModels = {
   fruit: require('../../api-models/fruit'),
 };
 
-//Получение списка фруктов
+//Получение списка фруктов + ПОИСК
 exports.GetFruitsList = async (ctx) => {
   const {
     fruitsOrderQuery,
@@ -201,14 +201,20 @@ exports.DeleteFruit = async (ctx) => {
 };
 
 //Удаление аватара фрукта
-exports.DeleteFruitAvatar = async (ctx) => {
+exports.PatchFruitAvatar = async (ctx) => {
   const fruitId = Number.parseInt(ctx.params.id) || null;
 
   if (!fruitId) {
     return Error(ctx, 400, 'Не удалось получить id фрукта');
   }
 
-  //Найдем ID картинки фрукта
+  const { imageId } = ctx.request.body;
+
+  if (!Validators.positiveIntNumberOrNull(imageId)) {
+    return Error(ctx, 400, 'Не указан ID изображения');
+  }
+
+  //Найдем нужный фрукт
   let fruitResponse = await Fruit.findOne({
     where: {
       id: fruitId,
@@ -220,9 +226,10 @@ exports.DeleteFruitAvatar = async (ctx) => {
     return Error(ctx, 404, 'Фрукт не найден');
   }
 
+  //Проверим, есть ли у фрукта аватар
   const fruitImageId = fruitResponse.Image && fruitResponse.Image.id;
 
-  //Удалим картинку, если она есть
+  //Удалим аватар из таблицы изображений, если он есть
   if (fruitImageId !== null) {
     let fruitImageResponse = await Image.destroy({
       where: {
@@ -234,6 +241,10 @@ exports.DeleteFruitAvatar = async (ctx) => {
       return Error(ctx, 404, 'Не удалось удалить аватар');
     }
   }
+
+  //Добавим фрукту новый ID картинки в аватар, при этом он может быть ак числом, так и null
+  fruitResponse.avatar = imageId;
+  await fruitResponse.save();
 
   //Вернем обновленный фрукт
   let newFruitResponse = await Fruit.findOne({

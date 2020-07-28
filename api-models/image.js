@@ -1,3 +1,6 @@
+const config = require('../config');
+const path = require('path');
+
 const transform = (ctx, document) => {
   if (!document) return null;
 

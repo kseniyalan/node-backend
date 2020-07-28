@@ -1,8 +1,5 @@
-module.exports = (num, p1, p2) => {
+module.exports = (num) => {
   return (
-    Number.isInteger(num) &&
-    num > 0 &&
-    (p1 ? num >= p1 : true) &&
-    (p2 ? num <= p2 : true)
+    Number.isInteger(num) && num > 0
   );
 };
