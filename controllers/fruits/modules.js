@@ -1,10 +1,12 @@
+const { Op } = require('sequelize');
 const { Fruit, sequelize } = require('../../dao');
 const Validators = require('../../modules/validators');
 
 exports.GetFruitsComposeQuery = async (queryData) => {
-  let { page, limit, sort, order, eaten } = queryData;
-  let fruitsOrderQuery = [],
-    fruitsWhereQuery = {};
+  let { page, limit, sort, order, eaten, search } = queryData;
+  let fruitsOrderQuery = [], fruitsWhereQuery = {};
+
+  console.log('QUERY: ', queryData);
 
   page = Number.parseInt(page, 10) || 1;
   limit = Number.parseInt(limit, 10) || 30;
@@ -20,6 +22,18 @@ exports.GetFruitsComposeQuery = async (queryData) => {
 
   if (eaten) {
     fruitsWhereQuery.eaten = eaten;
+  }
+
+  //Поиск
+  if (Validators.nonEmptyString(search) && search.length < 255) {
+    search = search.match(/\S+/g).map((doc) => `%${doc}%`);
+    customerWhereQuery = {
+      [Op.or]: [
+        {
+          name: { [Op.iLike]: { [Op.any]: search } },
+        },
+      ],
+    };
   }
 
   return {
