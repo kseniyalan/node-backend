@@ -9,7 +9,7 @@ module.exports = {
         amount: 3,
         eaten: false,
         created_at: new Date(new Date().setMinutes(0)),
-        avatar: 1,
+        avatar: null,
       },
       {
         id: 222,
