@@ -200,7 +200,7 @@ exports.DeleteFruit = async (ctx) => {
   return (ctx.body = fruitResponse);
 };
 
-//Удаление аватара фрукта
+//Редактирование аватара фрукта
 exports.PatchFruitAvatar = async (ctx) => {
   const fruitId = Number.parseInt(ctx.params.id) || null;
 
@@ -242,7 +242,7 @@ exports.PatchFruitAvatar = async (ctx) => {
     }
   }
 
-  //Добавим фрукту новый ID картинки в аватар, при этом он может быть ак числом, так и null
+  //Добавим фрукту новый ID картинки в аватар, при этом он может быть как числом, так и null
   fruitResponse.avatar = imageId;
   await fruitResponse.save();
 

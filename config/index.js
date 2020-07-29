@@ -2,7 +2,7 @@ module.exports = {
   dev: true,
   httpPort: 5555,
   https_port: 443,
-  host: 'http://localhost:5555/',
+  host: 'http://localhost:5555',
   static_directory: 'static',
   temp_directory: 'temp',
   max_file_size: 25,

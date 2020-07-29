@@ -1,6 +1,7 @@
 const fs = require('fs');
 const util = require('util');
 const sharp = require('sharp');
+const path = require('path');
 
 const fsreadFile = util.promisify(fs.readFile);
 
@@ -43,7 +44,7 @@ exports.HandleImage = async ({ files }) => {
     .clone()
     .resize(config.preview_size, config.preview_size)
     .toBuffer();
-  await savedObject.toFormat('jpg').withMetadata().toFile(files.image.path);
+  await savedObject.toFormat('jpg').quality(80).withMetadata().toFile(path.join(__dirname, '../../', config.static_directory, config.temp_directory, files.image.name));
 
   return {
     originalOrientation,

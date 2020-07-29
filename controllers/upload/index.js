@@ -46,11 +46,9 @@ exports.Upload = async (ctx) => {
           ? meta.height
           : meta.width,
       preview: `data:image/jpeg;base64,${previewBuffer.toString('base64')}`,
-      src: path.join(config.static_directory, config.temp_directory, files.image.name),
+      src: `${config.static_directory}/${config.temp_directory}/${files.image.name}`
     };
 
-    //console.log('Path: ', files.image.path);
-    console.log('Creating SRC: ', image.src);
   } catch (err) {
       console.log(err);
       await fsUnlink(files.image.path);
