@@ -17,7 +17,7 @@ exports.Ping = async (ctx) => {
 };
 
 exports.Auth = async (ctx) => {
-  const { fruitExists, error, text } = await AuthModule.ValidateFruitAuth(
+  const { managerExists, error, text } = await AuthModule.ValidateManagerAuth(
     ctx.request.body,
   );
 
@@ -25,12 +25,12 @@ exports.Auth = async (ctx) => {
     return Error(ctx, 400, text);
   }
 
-  if (!fruitExists) {
-    return Error(ctx, 404, 'Фрукт не найден');
+  if (!managerExists) {
+    return Error(ctx, 404, 'Менеджер не найден');
   }
 
-  const { token, refreshToken } = await AuthModule.UpsertFruitSession({
-    fruitExists: fruitExists.id,
+  const { token, refreshToken } = await AuthModule.UpsertManagerSession({
+    managerId: managerExists.id,
   });
 
   return (ctx.body = {
@@ -48,7 +48,7 @@ exports.LogOut = async (ctx) => {
       where: {
         token: ctx.request.header.token,
         status: 'ENABLED',
-        type: config.userRoleFruit,
+        type: config.userRoleManager,
       },
       limit: 1,
       returning: false,
@@ -104,7 +104,7 @@ exports.RefreshToken = async (ctx) => {
   });
 
   return (ctx.body = {
-    id: refreshExists.Session.fruit_id,
+    id: refreshExists.Session.manager_id,
     token: token,
     refresh_token: refreshToken,
   });

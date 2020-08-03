@@ -4,11 +4,11 @@ const moment = require('moment');
 const JWThandler = require('../../modules/jwt');
 const Validators = require('../../modules/validators');
 
-const { Fruit, Session, RefreshToken } = require('../../dao');
+const { Manager, Session, RefreshToken } = require('../../dao');
 
 const config = require('../../config');
 
-exports.ValidateFruitAuth = async ({ login, password }) => {
+exports.ValidateManagerAuth = async ({ login, password }) => {
   if (
     !Validators.nonEmptyString(login) ||
     login.length < 5 ||
@@ -16,12 +16,12 @@ exports.ValidateFruitAuth = async ({ login, password }) => {
   ) {
     return {
       error: true,
-      text: 'Не удалось получить параметры запроса', 
-      fruitExists: null,
+      text: 'Не удалось получить параметры запроса',
+      managerExists: null,
     };
   }
 
-  const fruitExists = await Fruit.findOne({
+  const managerExists = await Manager.findOne({
     where: {
       login: login.toLowerCase(),
       password: crypto
@@ -31,12 +31,12 @@ exports.ValidateFruitAuth = async ({ login, password }) => {
     },
   });
 
-  return { fruitExists, error: false };
+  return { managerExists, error: false };
 };
 
-exports.UpsertFruitSession = async ({ fruitId }) => {
+exports.UpsertManagerSession = async ({ managerId }) => {
   let session = await Session.findOne({
-    where: { fruit_id: fruitId, type: config.userRoleFruit },
+    where: { manager_id: managerId, type: config.userRoleManager },
   });
 
   if (!session) {
@@ -45,8 +45,8 @@ exports.UpsertFruitSession = async ({ fruitId }) => {
         token_type: 'general',
         valid_through: moment().add(1, 'week').toDate(),
       }),
-      fruit_id: fruitId,
-      type: config.userRoleFruit,
+      manager_id: managerId,
+      type: config.userRoleManager,
       status: 'ENABLED',
     });
   }

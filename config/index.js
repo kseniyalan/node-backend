@@ -9,7 +9,7 @@ module.exports = {
   preview_size: 80,
   passwordSalt: 'root',
   jwtSalt: 'jwtSalt',
-  userRoleFruit: 'fruit',
+  userRoleManager: 'manager',
   db: {
     PG_USERNAME: 'postgres',
     PG_PASSWORD: 'root',

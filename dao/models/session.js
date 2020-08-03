@@ -36,9 +36,10 @@ module.exports = (sequelize, DataTypes) => {
   );
 
   Session.associate = function (models) {
-    Session.belongsTo(models.Fruit, {
+    Session.belongsTo(models.Manager, {
       foreignKey: {
-        name: 'fruit_id',
+        name: 'manager_id',
+        allowNull: true,
       },
       onDelete: 'CASCADE',
     });
