@@ -16,10 +16,6 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.ENUM(['ENABLED', 'DISABLED', 'PENDING']),
         allowNull: false,
       },
-      phone: {
-        type: DataTypes.STRING,
-        allowNull: true,
-      },
       token: {
         type: DataTypes.TEXT,
         allowNull: false,
