@@ -8,6 +8,8 @@ module.exports = {
   max_file_size: 25,
   preview_size: 80,
   passwordSalt: 'root',
+  jwtSalt: 'jwtSalt',
+  userRoleFruit: 'fruit',
   db: {
     PG_USERNAME: 'postgres',
     PG_PASSWORD: 'root',
