@@ -4,17 +4,10 @@ module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.bulkInsert('sessions', [
       {
-        fruit_id: 111,
+        manager_id: 1,
         type: 'fruit',
         status: 'ENABLED',
-        token: 'fruit_apple',
-        last_update: new Date(),
-      },
-      {
-        fruit_id: 333,
-        type: 'fruit',
-        status: 'ENABLED',
-        token: 'fruit_orange',
+        token: 'token',
         last_update: new Date(),
       },
     ]);
