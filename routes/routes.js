@@ -3,6 +3,7 @@ const koaBody = require('koa-body');
 const path = require('path');
 const fs = require('fs');
 
+const AuthController = require('../controllers/auth');
 const FruitsController = require('../controllers/fruits');
 const UploadController = require('../controllers/upload');
 const AuthMiddleware = require('../controllers/middlewares/middleware');
@@ -13,6 +14,14 @@ const router = new Router({
   prefix: `/api`,
 });
 
+//АВТОРИЗАЦИЯ
+router.get('/ping', AuthMiddleware, AuthController.Ping);
+
+router.post('/auth', koaBody(), AuthController.Auth);
+router.delete('/auth', AuthMiddleware, AuthController.LogOut);
+router.post('/auth/refresh', koaBody(), AuthController.RefreshToken);
+
+//ФРУКТЫ
 //Получение списка фруктов или одного фрукта
 router.get('/fruits', AuthMiddleware, FruitsController.GetFruitsList);
 router.get('/fruits/:id', AuthMiddleware, FruitsController.GetSingleFruit);
@@ -32,7 +41,7 @@ router.delete('/fruits/:id', AuthMiddleware, FruitsController.DeleteFruit);
 //Удалить аватар фрукта
 router.patch('/fruits/:id/image', AuthMiddleware, koaBody(), FruitsController.PatchFruitAvatar);
 
-//Загрузка картинок
+//ЗАГРУЗКА КАРТИНОК
 //Создает папку в случае ее отсутствия
 
 if (

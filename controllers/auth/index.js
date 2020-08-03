@@ -1,10 +1,14 @@
 const moment = require('moment');
+const { Op } = require('sequelize');
+
+const DBModules = require('../../modules/db-modules');
+const JWThandler = require('../../modules/jwt');
 const Error = require('../../modules/request_error');
-const AuthModule = require('./modules');
+
+const { Session, RefreshToken } = require('../../dao');
 
 const config = require('../../config');
-
-const { Session } = require('../../dao');
+const AuthModule = require('./modules');
 
 exports.Ping = async (ctx) => {
   return (ctx.body = {
@@ -35,10 +39,6 @@ exports.Auth = async (ctx) => {
   });
 };
 
-exports.GetFruitProfile = async (ctx) => {
-  return (ctx.body = ctx.user);
-};
-
 exports.LogOut = async (ctx) => {
   await Session.update(
     {
@@ -56,4 +56,56 @@ exports.LogOut = async (ctx) => {
   );
 
   return (ctx.status = 200);
+};
+
+exports.RefreshToken = async (ctx) => {
+  const oldRefreshToken = ctx.request.body.refresh_token;
+
+  if (!Validators.nonEmptyString(oldRefreshToken)) {
+    return Error(ctx, 400, 'Не удалось получить токен');
+  }
+
+  const tokenData = await JWThandler.verifyToken(oldRefreshToken);
+
+  if (!tokenData) {
+    return Error(ctx, 400, 'Не удалось получить токен');
+  }
+
+  const refreshExists = await RefreshToken.findOne({
+    where: {
+      token: oldRefreshToken,
+      created_at: {
+        [Op.gte]: moment().subtract(1, 'month'),
+      },
+    },
+    include: [
+      {
+        model: Session,
+        where: {
+          status: 'ENABLED',
+        },
+        required: true,
+      },
+    ],
+  });
+
+  if (!refreshExists) {
+    return Error(ctx, 401, 'Токен не найден');
+  }
+
+  const { token, refreshToken } = await DBModules.HandleSession({
+    session: refreshExists.Session,
+  });
+
+  await RefreshToken.destroy({
+    where: {
+      token: oldRefreshToken,
+    },
+  });
+
+  return (ctx.body = {
+    id: refreshExists.Session.fruit_id,
+    token: token,
+    refresh_token: refreshToken,
+  });
 };
