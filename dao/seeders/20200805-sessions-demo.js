@@ -5,7 +5,7 @@ module.exports = {
     return queryInterface.bulkInsert('sessions', [
       {
         manager_id: 1,
-        type: 'fruit',
+        type: 'manager',
         status: 'ENABLED',
         token: 'token',
         last_update: new Date(),
