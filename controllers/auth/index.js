@@ -4,6 +4,7 @@ const { Op } = require('sequelize');
 const DBModules = require('../../modules/db-modules');
 const JWThandler = require('../../modules/jwt');
 const Error = require('../../modules/request_error');
+const Validators = require('../../modules/validators');
 
 const { Session, RefreshToken } = require('../../dao');
 
