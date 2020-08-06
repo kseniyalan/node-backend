@@ -18,6 +18,7 @@ const router = new Router({
 router.get('/ping', AuthMiddleware, AuthController.Ping);
 
 router.post('/auth', koaBody(), AuthController.Auth);
+router.post('/auth/signup', koaBody(), AuthController.CreateManager);
 router.delete('/auth', AuthMiddleware, AuthController.LogOut);
 router.post('/auth/refresh', koaBody(), AuthController.RefreshToken);
 

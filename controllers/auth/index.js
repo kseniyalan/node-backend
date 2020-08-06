@@ -40,6 +40,27 @@ exports.Auth = async (ctx) => {
   });
 };
 
+//Создание пользователя
+exports.CreateManager = async (ctx) => {
+  const { login, password, error, errorText } = await AuthModule.ValidateManagerCreation(ctx.request.body);
+
+  if (error) {
+    return Error(ctx, 400, errorText);
+  }
+
+  let managerId = await AuthModule.CreateManager({ login, password });
+
+  return (ctx.body = {
+    managerId: managerId,
+  });
+  /*
+  return (ctx.body = {
+    token: token,
+    refresh_token: refreshToken,
+  });
+  */
+};
+
 exports.LogOut = async (ctx) => {
   await Session.update(
     {
