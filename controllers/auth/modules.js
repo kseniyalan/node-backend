@@ -67,23 +67,30 @@ exports.ValidateManagerCreation = async ({ login, password }) => {
 
 exports.CreateManager = async ({ login, password }) => {
   const managerId = await sequelize.transaction(async (t) => {
-    let manager = await Manager.create(
-      {
-        login: login.toLowerCase(),
-        password: crypto
-          .createHmac('sha512', config.passwordSalt)
-          .update(password)
-          .digest('hex'),
-      },
-      {
-        transaction: t,
-      },
-    );
-
-    return manager.id;
+    try {
+      let manager = await Manager.create(
+        {
+          login: login.toLowerCase(),
+          password: crypto
+            .createHmac('sha512', config.passwordSalt)
+            .update(password)
+            .digest('hex'),
+        },
+        {
+          transaction: t,
+        },
+      );
+      return manager.id;
+    } catch (err) {
+      return false;
+    }
   });
+  if (!managerId) return {
+    creationError: true,
+    creationErrorText: 'Ошибка при создании пользователя',
+  };
 
-  return managerId;
+  return { managerId, creationError: false };
 };
 
 exports.UpsertManagerSession = async ({ managerId }) => {

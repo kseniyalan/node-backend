@@ -48,7 +48,11 @@ exports.CreateManager = async (ctx) => {
     return Error(ctx, 400, errorText);
   }
 
-  let managerId = await AuthModule.CreateManager({ login, password });
+  let { managerId, creationError, creationErrorText } = await AuthModule.CreateManager({ login, password });
+
+  if (creationError) {
+    return Error(ctx, 400, creationErrorText);
+  }
 
   return (ctx.body = {
     managerId: managerId,
