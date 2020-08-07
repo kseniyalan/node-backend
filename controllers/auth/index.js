@@ -30,12 +30,13 @@ exports.Auth = async (ctx) => {
     return Error(ctx, 404, 'Менеджер не найден');
   }
 
+  //Создание сессии и получение токенов
   const { token, refreshToken } = await AuthModule.UpsertManagerSession({
     managerId: managerExists.id,
   });
 
   return (ctx.body = {
-    token: token,
+    token,
     refresh_token: refreshToken,
   });
 };
@@ -48,21 +49,20 @@ exports.CreateManager = async (ctx) => {
     return Error(ctx, 400, errorText);
   }
 
+  //Создание менеджера
   let { managerId, creationError, creationErrorText } = await AuthModule.CreateManager({ login, password });
 
   if (creationError) {
     return Error(ctx, 400, creationErrorText);
   }
 
+  //Создание сессии и получение токенов
+  const { token, refreshToken } = await AuthModule.UpsertManagerSession({ managerId });
+
   return (ctx.body = {
-    managerId: managerId,
-  });
-  /*
-  return (ctx.body = {
-    token: token,
+    token,
     refresh_token: refreshToken,
   });
-  */
 };
 
 exports.LogOut = async (ctx) => {

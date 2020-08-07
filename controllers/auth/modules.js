@@ -86,6 +86,7 @@ exports.CreateManager = async ({ login, password }) => {
     }
   });
   if (!managerId) return {
+    managerId,
     creationError: true,
     creationErrorText: 'Ошибка при создании пользователя',
   };
