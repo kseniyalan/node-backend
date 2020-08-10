@@ -1,6 +1,7 @@
 const config = require('./config');
 
 const db = require('./dao');
+const redis = require('./redis');
 
 const app = require('./create_server');
 

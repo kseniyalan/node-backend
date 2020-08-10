@@ -1,10 +1,12 @@
 const crypto = require('crypto');
 const moment = require('moment');
+const redis = require('redis');
 
 const JWThandler = require('../../modules/jwt');
 const Validators = require('../../modules/validators');
 
 const { Manager, Session, RefreshToken } = require('../../dao');
+const redisClient = require('../../redis');
 
 const config = require('../../config');
 
@@ -90,17 +92,35 @@ exports.UpsertManagerSession = async ({ managerId }) => {
     where: { manager_id: managerId, type: config.userRoleManager },
   });
 
+  //Генерация токена
+  const token = await JWThandler.generateToken({
+    token_type: 'general',
+    valid_through: moment().add(1, 'week').toDate(),
+  });
+
   if (!session) {
     session = await Session.create({
-      token: await JWThandler.generateToken({
-        token_type: 'general',
-        valid_through: moment().add(1, 'week').toDate(),
-      }),
+      token,
       manager_id: managerId,
       type: config.userRoleManager,
       status: 'ENABLED',
     });
   }
+
+  //Запись токенов в Redis
+  redisClient.select(0, ( ) => {
+    redisClient.on("error", (err) =>  {
+        console.log("Error " + err);
+    });
+    // Запись данных
+    redisClient.set("token", token, redis.print);
+    // Получение данных
+    redisClient.get("token", (err, data) => {
+        if(err) console.log(err);
+        console.log('Redis data: ', data);
+    });
+    redisClient.quit( );
+  });
 
   const refreshToken = await JWThandler.generateToken({ 
     token_type: 'refresh',
@@ -111,6 +131,8 @@ exports.UpsertManagerSession = async ({ managerId }) => {
     session_id: session.id,
     token: refreshToken,
   });
+
+
 
   return {
     token: session.token,
