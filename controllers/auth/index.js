@@ -57,7 +57,7 @@ exports.CreateManager = async (ctx) => {
   }
 
   //Создание сессии и получение токенов
-  const { token, refreshToken } = await AuthModule.UpsertManagerSession({ managerId });
+  const { token, refreshToken } = await AuthModule.CreateManagerSession({ managerId });
 
   return (ctx.body = {
     token,
