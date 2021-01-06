@@ -20,7 +20,7 @@
     "@koa/cors": "^3.0.0",
     "@slack/web-api": "^5.8.0",
     "aws-sdk": "^2.622.0",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "convict": "^6.0.0",
     "file-type": "^14.1.2",
     "firebase-admin": "^8.10.0",
