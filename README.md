@@ -1,0 +1,1 @@
+Multiprocess REST server on Node.js with Redis for data caching and PostgreSQL database as data storage.
