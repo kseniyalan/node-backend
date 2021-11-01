@@ -22,7 +22,7 @@ exports.GetFruitsComposeQuery = async (queryData) => {
     fruitsWhereQuery.eaten = eaten;
   }
 
-  //Поиск
+  //SEARCH
   if (Validators.nonEmptyString(search) && search.length < 255) {
     search = search.match(/\S+/g).map((doc) => `%${doc}%`);
     fruitsWhereQuery.name = { [Op.iLike]: { [Op.any]: search } };

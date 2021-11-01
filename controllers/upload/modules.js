@@ -14,7 +14,7 @@ exports.HandleImage = async ({ files }) => {
 
   const originalOrientation = meta.orientation;
 
-  //Обработка поворотов картинки
+  //Image Rotation Processing
   if (originalOrientation) { 
     switch (originalOrientation) {
       case 2:

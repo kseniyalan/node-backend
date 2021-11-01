@@ -2,7 +2,7 @@ const moment = require('moment');
 const { RefreshToken } = require('../dao');
 const JWThandler = require('./jwt');
 
-// Метод получения токена и рефреш-токена для сессии
+// Method for obtaining a token and a refresh token for a session
 exports.HandleSession = async ({ session }) => {
   if (moment(session.last_update).isBefore(moment().subtract(1, 'week'))) {
     (session.token = await JWThandler.generateToken({

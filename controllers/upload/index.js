@@ -17,7 +17,7 @@ exports.Upload = async (ctx) => {
   let image = {};
 
   if (!files) {
-    return Error(ctx, 400, 'Файлы не найдены');
+    return Error(ctx, 400, 'No files found');
   }
 
   for (let key in files) {
@@ -25,7 +25,7 @@ exports.Upload = async (ctx) => {
   }
 
   if (!files.image) {
-    return Error(ctx, 400, 'Не удалось получить файл "image"');
+    return Error(ctx, 400, 'Failed to get file "image"');
   }
   files.image.name = files.image.path.split('_')[1];
 
@@ -52,7 +52,7 @@ exports.Upload = async (ctx) => {
   } catch (err) {
       console.log(err);
       await fsUnlink(files.image.path);
-    return Error(ctx, 400, 'Не удалось обработать файл "image"');
+    return Error(ctx, 400, 'Failed to process file "image"');
   }
 
   image = await Image.create(image);

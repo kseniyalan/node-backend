@@ -27,10 +27,10 @@ exports.Auth = async (ctx) => {
   }
 
   if (!managerExists) {
-    return Error(ctx, 404, 'Менеджер не найден');
+    return Error(ctx, 404, 'Manager is not found');
   }
 
-  //Создание сессии и получение токенов
+  //Create a session and get tokens
   const { token, refreshToken } = await AuthModule.UpsertManagerSession({
     managerId: managerExists.id,
   });
@@ -41,7 +41,7 @@ exports.Auth = async (ctx) => {
   });
 };
 
-//Создание пользователя
+//User creation
 exports.CreateManager = async (ctx) => {
   const { login, password, error, errorText } = await AuthModule.ValidateManagerCreation(ctx.request.body);
 
@@ -49,14 +49,14 @@ exports.CreateManager = async (ctx) => {
     return Error(ctx, 400, errorText);
   }
 
-  //Создание менеджера
+  //Create a manager
   let { managerId, creationError, creationErrorText } = await AuthModule.CreateManager({ login, password });
 
   if (creationError) {
     return Error(ctx, 400, creationErrorText);
   }
 
-  //Создание сессии и получение токенов
+  //Create a session and get tokens
   const { token, refreshToken } = await AuthModule.CreateManagerSession({ managerId });
 
   return (ctx.body = {
@@ -88,13 +88,13 @@ exports.RefreshToken = async (ctx) => {
   const oldRefreshToken = ctx.request.body.refresh_token;
 
   if (!Validators.nonEmptyString(oldRefreshToken)) {
-    return Error(ctx, 400, 'Не удалось получить токен');
+    return Error(ctx, 400, 'Failed to get token');
   }
 
   const tokenData = await JWThandler.verifyToken(oldRefreshToken);
 
   if (!tokenData) {
-    return Error(ctx, 400, 'Не удалось получить токен');
+    return Error(ctx, 400, 'Failed to get token');
   }
 
   const refreshExists = await RefreshToken.findOne({
@@ -116,7 +116,7 @@ exports.RefreshToken = async (ctx) => {
   });
 
   if (!refreshExists) {
-    return Error(ctx, 401, 'Токен не найден');
+    return Error(ctx, 401, 'Token is not found');
   }
 
   const { token, refreshToken } = await DBModules.HandleSession({

@@ -1,6 +1,6 @@
-// Подключаем модуль Redis
+// Connecting the Redis module
 const redis  = require('redis');
-// Создаем клиента
+// Create a client
 const client = redis.createClient();
 
 module.exports = client;

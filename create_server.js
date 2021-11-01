@@ -5,8 +5,8 @@ const Koa = require('koa');
 const logger = require('koa-logger');
 const cors = require('@koa/cors');
 const path = require('path');
-const serve = require('koa-static'); //Расшаривает файлы
-const mount = require('koa-mount'); //Монтирует пути до статики
+const serve = require('koa-static');
+const mount = require('koa-mount'); //Mounts paths to static
 
 const routes = require('./routes/routes');
 
@@ -18,7 +18,7 @@ app.proxy = true;
 
 app.use(routes.routes()).use(routes.allowedMethods());
 
-//Монтирует путь к папкам со статикой
+//Mounts path to static folders
 app.use(
   mount(
     '/',

@@ -14,7 +14,7 @@ const router = new Router({
   prefix: `/api`,
 });
 
-//АВТОРИЗАЦИЯ
+//AUTHORIZATION
 router.get('/ping', AuthMiddleware, AuthController.Ping);
 
 router.post('/auth', koaBody(), AuthController.Auth);
@@ -22,29 +22,29 @@ router.post('/auth/signup', koaBody(), AuthController.CreateManager);
 router.delete('/auth', AuthMiddleware, AuthController.LogOut);
 router.post('/auth/refresh', koaBody(), AuthController.RefreshToken);
 
-//ФРУКТЫ
-//Получение списка фруктов или одного фрукта
+//FRUITS
+//Getting a list of fruits or a single fruit
 router.get('/fruits', AuthMiddleware, FruitsController.GetFruitsList);
 router.get('/fruits/:id', AuthMiddleware, FruitsController.GetSingleFruit);
 
-//Обновить, фрукт съеден или нет
+//Refresh fruit is eaten or not
 router.patch('/fruits/:id', AuthMiddleware, koaBody(), FruitsController.PatchSingleFruit);
 
-//Отредактировать фрукт
+//Edit fruit
 router.put('/fruits/:id', AuthMiddleware, koaBody(), FruitsController.PutFruit);
 
-//Создать фрукт
+//Create fruit
 router.post('/fruits', AuthMiddleware, koaBody(), FruitsController.CreateFruit);
 
-//Удалить фрукт
+//Delete fruit
 router.delete('/fruits/:id', AuthMiddleware, FruitsController.DeleteFruit);
 
-//Удалить аватар фрукта
+//Remove fruit avatar
 router.patch('/fruits/:id/image', AuthMiddleware, koaBody(), FruitsController.PatchFruitAvatar);
 
-//ЗАГРУЗКА КАРТИНОК
-//Создает папку в случае ее отсутствия
+//PICTURES UPLOADING
 
+//Creates a folder if it is missing
 if (
   !fs.existsSync(
     path.join(__dirname, '..', config.static_directory, config.temp_directory),
@@ -55,7 +55,7 @@ if (
   );
 }
 
-//Сохранит файлы в папку /static/temp
+//Save files to folder /static/temp
 router.post(
   '/files/upload',
   AuthMiddleware,

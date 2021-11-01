@@ -10,7 +10,7 @@ const redisClient = require('../../redis');
 
 const config = require('../../config');
 
-//Валидация авторизации пользователя
+//User authorization validation
 exports.ValidateManagerAuth = async ({ login, password }) => {
   if (
     !Validators.nonEmptyString(login) 
@@ -19,7 +19,7 @@ exports.ValidateManagerAuth = async ({ login, password }) => {
   ) {
     return {
       error: true,
-      text: 'Не удалось получить параметры запроса',
+      text: 'Failed to get request parameters',
       managerExists: null,
     };
   }
@@ -37,9 +37,9 @@ exports.ValidateManagerAuth = async ({ login, password }) => {
   return { managerExists, error: false };
 };
 
-//Валидация создания пользователя (регистрации)
+//User creation (registration) validation
 exports.ValidateManagerCreation = async ({ login, password }) => {
-  //Проверка валидности логина и пароля
+  //Checking the validity of the login and password
   if (
     !Validators.nonEmptyString(login) 
     || login.length < 5
@@ -48,12 +48,12 @@ exports.ValidateManagerCreation = async ({ login, password }) => {
   ) {
     return {
       error: true,
-      errorText: 'Не удалось получить параметры запроса',
+      errorText: 'Failed to get request parameters',
     };
   }
 
-  //Проверка, не занят ли уже этот логин
-  const managerExists = await Manager.count({ //Вернет количество найденных объетов, а не сам объект, что более оптимально
+  //Check if this login is already busy
+  const managerExists = await Manager.count({ //Returns the number of found objects, not the object itself, which is more optimal
     where: {
       login: login.toLowerCase(),
     },
@@ -61,7 +61,7 @@ exports.ValidateManagerCreation = async ({ login, password }) => {
 
   if (managerExists) return {
     error: true,
-    errorText: 'Данный логин уже используется',
+    errorText: 'This login is already in use',
   }; 
 
   return { login, password, error: false };
@@ -81,7 +81,7 @@ exports.CreateManager = async ({ login, password }) => {
   if (!manager) return {
     managerId: null,
     creationError: true,
-    creationErrorText: 'Ошибка при создании пользователя',
+    creationErrorText: 'Error during creating user',
   };
 
   return { managerId: manager.id, creationError: false };
@@ -92,7 +92,7 @@ exports.UpsertManagerSession = async ({ managerId }) => {
     where: { manager_id: managerId, type: config.userRoleManager },
   });
 
-  //Генерация токена
+  //Token generation
   const token = await JWThandler.generateToken({
     token_type: 'general',
     valid_through: moment().add(1, 'week').toDate(),
@@ -107,14 +107,14 @@ exports.UpsertManagerSession = async ({ managerId }) => {
     });
   }
 
-  //Запись токенов в Redis
+  //Writing tokens in Redis
   redisClient.select(0, ( ) => {
     redisClient.on("error", (err) =>  {
         console.log("Error " + err);
     });
-    // Запись данных
+    // Data recording
     redisClient.set("token", token, redis.print);
-    // Получение данных
+    // Get data
     redisClient.get("token", (err, data) => {
         if(err) console.log(err);
         console.log('Redis data: ', data);

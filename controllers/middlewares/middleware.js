@@ -9,7 +9,7 @@ module.exports = async (ctx, next) => {
   const token = ctx.request.header.token;
 
   if (!Validators.nonEmptyString(token)) {
-    return Error(ctx, 401, 'Не удалось получить токен');
+    return Error(ctx, 401, 'Failed to get token');
   }
 
   const session = await Session.findOne({
@@ -27,11 +27,11 @@ module.exports = async (ctx, next) => {
   });
 
   if (!session) {
-    return Error(ctx, 401, 'Сессия не найдена');
+    return Error(ctx, 401, 'Session is not found');
   }
 
   if (moment(session.last_update).isBefore(moment().subtract(1, 'week'))) {
-    return Error(ctx, 401, 'Срок действия токена истёк');
+    return Error(ctx, 401, 'Token expired');
   }
 
   return next();

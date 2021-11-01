@@ -18,7 +18,7 @@ const sequelize = new Sequelize(
 );
 
 sequelize
-  .sync() //{force: true} каждый раз будет перезаписывать БД при каждом запуске
+  .sync() //{force: true} will overwrite the database every time it starts
   .then((result) => {})
   .catch((err) => {});
 

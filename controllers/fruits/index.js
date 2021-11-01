@@ -8,7 +8,7 @@ const ApiModels = {
   fruit: require('../../api-models/fruit'),
 };
 
-//Получение списка фруктов + ПОИСК
+//Getting a list of fruits + SEARCH
 exports.GetFruitsList = async (ctx) => {
   const {
     fruitsOrderQuery,
@@ -35,12 +35,12 @@ exports.GetFruitsList = async (ctx) => {
   });
 };
 
-//Получение одного фрукта по ID
+//Getting one fruit by ID
 exports.GetSingleFruit = async (ctx) => {
   const fruitId = Number.parseInt(ctx.params.id) || null;
 
   if (!fruitId) {
-    return Error(ctx, 400, 'Не удалось получить id фрукта');
+    return Error(ctx, 400, 'Failed to get the fruit id');
   }
 
   let fruitResponse = await Fruit.findOne({
@@ -51,24 +51,24 @@ exports.GetSingleFruit = async (ctx) => {
   });
 
   if (!fruitResponse) {
-    return Error(ctx, 404, 'Фрукт не найден');
+    return Error(ctx, 404, 'Fruit is not found');
   }
 
   return (ctx.body = ApiModels.fruit(ctx, fruitResponse));
 };
 
-//Обновить отдельные свойства одного фрукта
+//Refresh properties of one fruit
 exports.PatchSingleFruit = async (ctx) => {
   const fruitId = Number.parseInt(ctx.params.id) || null;
 
   if (!fruitId) {
-    return Error(ctx, 400, 'Не удалось получить id фрукта');
+    return Error(ctx, 400, 'Failed to get the fruit id');
   }
 
   const { eaten } = ctx.request.body;
 
   if (!Validators.isBoolean(eaten)) {
-    return Error(ctx, 400, 'Не указано состояние фрукта');
+    return Error(ctx, 400, 'Fruit condition is not specified');
   }
 
   let fruitResponse = await Fruit.findOne({
@@ -79,7 +79,7 @@ exports.PatchSingleFruit = async (ctx) => {
   });
 
   if (!fruitResponse) {
-    return Error(ctx, 404, 'Фрукт не найден');
+    return Error(ctx, 404, 'Fruit not found');
   }
 
   fruitResponse.eaten = eaten;
@@ -89,12 +89,12 @@ exports.PatchSingleFruit = async (ctx) => {
   return (ctx.body = ApiModels.fruit(ctx, fruitResponse));
 };
 
-//Отредактировать фрукт
+//Edit fruit
 exports.PutFruit = async (ctx) => {
   const fruitId = Number.parseInt(ctx.params.id) || null;
 
   if (!fruitId) {
-    return Error(ctx, 400, 'Не удалось получить id фрукта');
+    return Error(ctx, 400, 'Failed to get the fruit id');
   }
 
   let { name, amount, eaten, error, errorText } = await FruitModules.ValidateFruitData(ctx.request.body);
@@ -119,7 +119,7 @@ exports.PutFruit = async (ctx) => {
   );
 
   if (!fruit) {
-    return Error(ctx, 404, 'Фрукт не найден');
+    return Error(ctx, 404, 'Fruit is not found');
   }
 
   let response = await Fruit.findOne({
@@ -132,7 +132,7 @@ exports.PutFruit = async (ctx) => {
   return (ctx.body = ApiModels.fruit(ctx, response));
 };
 
-//Создание фрукта
+//Create new fruit
 exports.CreateFruit = async (ctx) => {
   const { name, amount, eaten, error, errorText } = await FruitModules.ValidateFruitData(ctx.request.body);
 
@@ -151,15 +151,15 @@ exports.CreateFruit = async (ctx) => {
   return (ctx.body = ApiModels.fruit(ctx, response));
 };
 
-//Удаление фрукта
+//Delete fruit
 exports.DeleteFruit = async (ctx) => {
   const fruitId = Number.parseInt(ctx.params.id) || null;
 
   if (!fruitId) {
-    return Error(ctx, 400, 'Не удалось получить id фрукта');
+    return Error(ctx, 400, 'Failed to get the fruit id');
   }
 
-  //Найдем ID картинки фрукта
+  //Find the ID of the picture of the fruit
   let fruitResponse = await Fruit.findOne({
     where: {
       id: fruitId,
@@ -168,12 +168,12 @@ exports.DeleteFruit = async (ctx) => {
   });
 
   if (!fruitResponse) {
-    return Error(ctx, 404, 'Фрукт не найден');
+    return Error(ctx, 404, 'Fruit is not found');
   }
 
   const fruitImageId = fruitResponse.Image && fruitResponse.Image.id;
 
-  //Удалим картинку, если она есть
+  //Delete the picture, if exists
   if (fruitImageId !== null) {
     let fruitImageResponse = await Image.destroy({
       where: {
@@ -182,11 +182,11 @@ exports.DeleteFruit = async (ctx) => {
     });
 
     if (!fruitImageResponse) {
-      return Error(ctx, 404, 'Не удалось удалить аватар');
+      return Error(ctx, 404, 'Failed to delete avatar');
     }
   }
   
-  //Удалим сам фрукт
+  //Remove the fruit itself
   let fruitDeleteResponse = await Fruit.destroy({
     where: {
       id: fruitId,
@@ -194,27 +194,27 @@ exports.DeleteFruit = async (ctx) => {
   });
 
   if (!fruitDeleteResponse) {
-    return Error(ctx, 404, 'Фрукт не найден');
+    return Error(ctx, 404, 'Fruit is not found');
   }
 
   return (ctx.body = fruitResponse);
 };
 
-//Редактирование аватара фрукта
+//Fruit avatar editing
 exports.PatchFruitAvatar = async (ctx) => {
   const fruitId = Number.parseInt(ctx.params.id) || null;
 
   if (!fruitId) {
-    return Error(ctx, 400, 'Не удалось получить id фрукта');
+    return Error(ctx, 400, 'Failed to get the fruit id');
   }
 
   const { imageId } = ctx.request.body;
 
   if (!Validators.positiveIntNumberOrNull(imageId)) {
-    return Error(ctx, 400, 'Не указан ID изображения');
+    return Error(ctx, 400, 'Image ID not specified');
   }
 
-  //Найдем нужный фрукт
+  //Find the fruit you need
   let fruitResponse = await Fruit.findOne({
     where: {
       id: fruitId,
@@ -223,13 +223,13 @@ exports.PatchFruitAvatar = async (ctx) => {
   });
 
   if (!fruitResponse) {
-    return Error(ctx, 404, 'Фрукт не найден');
+    return Error(ctx, 404, 'Fruit is not found');
   }
 
-  //Проверим, есть ли у фрукта аватар
+  //Check if the fruit has an avatar
   const fruitImageId = fruitResponse.Image && fruitResponse.Image.id;
 
-  //Удалим аватар из таблицы изображений, если он есть
+  //Remove the avatar from the image table, if exists
   if (fruitImageId !== null) {
     let fruitImageResponse = await Image.destroy({
       where: {
@@ -238,15 +238,15 @@ exports.PatchFruitAvatar = async (ctx) => {
     });
 
     if (!fruitImageResponse) {
-      return Error(ctx, 404, 'Не удалось удалить аватар');
+      return Error(ctx, 404, 'Failed to delete avatar');
     }
   }
 
-  //Добавим фрукту новый ID картинки в аватар, при этом он может быть как числом, так и null
+  //Let's add a new ID of the picture to the avatar of the fruit, and it can be either a number or null
   fruitResponse.avatar = imageId;
   await fruitResponse.save();
 
-  //Вернем обновленный фрукт
+  //Let's return the updated fruit
   let newFruitResponse = await Fruit.findOne({
     where: {
       id: fruitId,
@@ -255,7 +255,7 @@ exports.PatchFruitAvatar = async (ctx) => {
   });
 
   if (!fruitResponse) {
-    return Error(ctx, 404, 'Фрукт не найден');
+    return Error(ctx, 404, 'Fruit is not found');
   }
 
   return (ctx.body = ApiModels.fruit(ctx, newFruitResponse));
