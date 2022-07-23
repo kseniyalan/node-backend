@@ -22,7 +22,7 @@
     "aws-sdk": "^2.622.0",
     "axios": "^0.19.2",
     "convict": "^6.0.0",
-    "file-type": "^14.1.2",
+    "file-type": "^16.5.4",
     "firebase-admin": "^8.10.0",
     "jsonwebtoken": "^8.5.1",
     "koa": "^2.11.0",
